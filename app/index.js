@@ -7,8 +7,8 @@ const PORT = process.env.PORT || 8000
 const TITLE = "Frangipane"
 
 app.get('/metrics', (req, res) => {
-    res.set('Content-Type', Prometheus.register.contentType)
-    res.end(Prometheus.register.metrics())
+    res.set('Content-Type', prom.register.contentType)
+    res.end(prom.register.metrics())
 })
 
 app.use('*', (req, res) => {
