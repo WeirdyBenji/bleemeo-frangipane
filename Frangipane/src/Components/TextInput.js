@@ -11,7 +11,8 @@ class TextInput extends Component {
         participant: null,
         participantsList: [],
         filteredArray: [],
-        winner: "",
+        last: false,
+        winner: null,
         randomInt: null
     };
   }
@@ -24,7 +25,8 @@ handleInputChange = (value) => {
 }
 
 addParticipant = () => {
-    this.setState({participantsList: [...this.state.participantsList, this.state.participant]})
+    if (this.state.participant)
+        this.setState({participantsList: [...this.state.participantsList, this.state.participant]})
 }
 
 randomPick = () => {
@@ -33,18 +35,23 @@ randomPick = () => {
     let winner = this.state.participantsList[index];
     let dirtyArray = [...this.state.participantsList];
     const filteredItems = dirtyArray.slice(0, index).concat(dirtyArray.slice(index + 1, dirtyArray.length));
+    if (filteredItems.length > 1)
+        this.setState({last: true});
+    else if (filteredItems.length == 0)
+        this.setState({last: false});
     this.setState({participantsList: filteredItems, winner: winner});
 }
 
 render() {
+    console.log("length:", this.state.participantsList.length)
     return (
     <div>
         <div style={{marginTop: "60px", marginLeft: "600px", width: "10%", height: "300px", borderRadius: "25px",border: "2px solid", textAlign: "center", overflow: "scroll"}}>
         {this.state.participantsList.map(txt => <p style={{fontSize: "20px"}}>{txt}</p>)}
         </div>
-        <AwesomeButton type="primary" style={{marginTop: "6%", marginLeft: "40%", height: "60px", fontSize: "30px"}} onPress={this.randomPick}>{this.state.participantsList.length == 1 && this.state.last == true ? "La dernière part revient à..." : "La prochaine part est pour..."}</AwesomeButton>
-        <div>
+        <div style={{paddingLeft: "900px", marginTop: "-170px"}}>
         <input
+            style={{marginLeft: "1000px", margin: "20px", width: "120px", fontSize: "20px"}}
             type="text"
             id="participantadder"
             value={this.state.participant}
@@ -52,8 +59,11 @@ render() {
                 this.handleInputChange(e.target.value)
             }
         />
-        <button onClick={this.addParticipant}>Ajouter</button>
-        <p>{this.state.winner}</p>
+        <AwesomeButton style={{height: "30px", marginBottom: "5px"}} onPress={this.addParticipant}>Ajouter</AwesomeButton>
+        </div>
+        <AwesomeButton type="primary" style={{marginTop: "10%", marginLeft: "37%", height: "60px", fontSize: "30px"}} onPress={this.randomPick}>{this.state.participantsList.length == 1 && this.state.last == true ? "La dernière part revient à..." : "La prochaine part est pour..."}</AwesomeButton>
+        <div>
+        <p style={{textAlign: "center", marginTop: "20px", fontSize: "20px"}}>{this.state.winner} {this.state.winner ? "!" : ""}</p>
         </div>
     </div>
     );
