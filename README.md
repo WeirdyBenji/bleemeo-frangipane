@@ -4,4 +4,5 @@
 `cd app && npm i`
 
 ## Usage
-`npm start`
+Linux : `cd app && npm start` or `sh start.sh`
+Windows : Double click on start.cmd
